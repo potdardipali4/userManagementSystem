@@ -1,0 +1,175 @@
+<div class="container mt-5">
+    <div class="row text-center">
+        <h3>User Management System</h3>
+    </div>
+    <div class="card mt-2">
+        <div class="card-body">
+            <div class="card-header text-end">
+                <div class="row">
+                    <div class="col text-start">
+                        <h5>User List</h5>
+                    </div>
+                    <div class="col text-end">
+                        <button class="btn btn-success btn-sm" (click)="addUser()">Add
+                            User</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" row m-3">
+                <div class="col-2">
+                    <input type="text" class="form-control" placeholder="Filter by name" [(ngModel)]="filterName" (input)="filterData()">
+                </div>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Sr. No</th>
+                        <th scope="col">
+                            <a href="javascript:void(0)" (click)="sort('Name')">
+                                Name
+                                <span>
+                                    <i class="sort-arrow"
+                                        [class.active]="sortColumn === 'Name' && sortDirection === 'asc'">↑</i>
+                                    <i class="sort-arrow"
+                                        [class.active]="sortColumn === 'Name' && sortDirection === 'desc'">↓</i>
+                                </span>
+                            </a>
+                        </th>
+                        <th scope="col">
+                            <a href="javascript:void(0)" (click)="sort('email')">
+                                Email
+                                <span>
+                                    <i class="sort-arrow"
+                                        [class.active]="sortColumn === 'email' && sortDirection === 'asc'">↑</i>
+                                    <i class="sort-arrow"
+                                        [class.active]="sortColumn === 'email' && sortDirection === 'desc'">↓</i>
+                                </span>
+                            </a>
+                        </th>
+                        <th scope="col">Role</th>
+                        <th scope="col">ACtion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of paginatedUserList; let i=index">
+                        <th scope="row">{{i+1}}</th>
+                        <td>{{user.name}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.role}}</td>
+                        <td><button class="btn btn-success btn-sm m-2" (click)="editUser(i, user)">Edit</button>
+                            <button class="btn btn-success btn-sm" (click)="deleteUser(i,user)">Delete</button>
+                        </td>
+                    </tr>
+                    <tr colspan="12" class="text-center" *ngIf="paginatedUserList.length<= 0" > No Data Found </tr>
+                </tbody>
+            </table>           
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item" *ngIf="currentPage > 1">
+                        <a class="page-link" (click)="changePage(currentPage - 1)"
+                            href="javascript:void(0)">Previous</a>
+                    </li>
+                    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+                        [class.active]="currentPage === i + 1">
+                        <a class="page-link" (click)="changePage(i + 1)" href="javascript:void(0)">{{ i + 1 }}</a>
+                    </li>
+                    <li class="page-item" *ngIf="currentPage < totalPages">
+                        <a class="page-link" (click)="changePage(currentPage + 1)" href="javascript:void(0)">Next</a>
+                    </li>
+                </ul>
+            </nav>            
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- =======================================================
+                          FORM POPUP START
+============================================================ -->
+<div class="modal fade" #addUserModal id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (CLICK)="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="userForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input id="name" type="text" class="form-control" formControlName="name"
+                            [class.is-invalid]="name?.invalid && name?.touched" />
+                        <div *ngIf="name?.invalid && name?.touched" class="invalid-feedback">
+                            <small *ngIf="name?.errors?.['required']">Name is required.</small>
+                            <small *ngIf="name?.errors?.['minlength']">
+                                Name must be at least 3 characters long.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" class="form-control" formControlName="email"
+                            [class.is-invalid]="email?.invalid && email?.touched" />
+                        <div *ngIf="email?.invalid && email?.touched" class="invalid-feedback">
+                            <small *ngIf="email?.errors?.['required']">Email is required.</small>
+                            <small *ngIf="email?.errors?.['email']">Enter a valid email.</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" class="form-control" formControlName="role"
+                            [class.is-invalid]="role?.invalid && role?.touched">
+                            <option value="">Select Role</option>
+                            <option value="Admin">Admin</option>
+                            <option value="User">User</option>
+                        </select>
+                        <div *ngIf="role?.invalid && role?.touched" class="invalid-feedback">
+                            <small *ngIf="role?.errors?.['required']">Role is required.</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" *ngIf="showSubmit" class="btn btn-primary" data-bs-dismiss="modal"
+                    (click)="onSubmit(userForm)" [disabled]="userForm.invalid">Submit</button>
+                <button type="button" *ngIf="showUpdate" class="btn btn-primary" data-bs-dismiss="modal"
+                    [disabled]="userForm.invalid" (click)="update(editIndex, userForm.value)">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- =======================================================
+                          FORM POPUP END
+============================================================ -->
+
+
+
+
+<!-- =======================================================
+                          DELETE CONFIRMATION POPUP START
+============================================================ -->
+<div class="modal fade" #deleteUserModal id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p><i> Are u really want to delete user <b>{{userName}}</b> ! </i> </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    (click)="closeDeleteUserModal()">No</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                    (click)="confirmDelete()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- =======================================================
+                          DELETE CONFIRMATION POPUP END
+============================================================ -->

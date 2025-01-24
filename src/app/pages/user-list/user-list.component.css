@@ -1,0 +1,51 @@
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  
+  .pagination .page-item .page-link {
+    cursor: pointer;
+  }
+
+
+
+  .invalid-feedback {
+    color: red;
+    font-size: 0.9em;
+  }
+  
+  input.is-invalid, select.is-invalid {
+    border-color: red;
+  }
+
+  /* sorting */
+ /* Style for the arrows */
+.sort-arrow {
+    font-size: 0.8em;
+    margin-left: 5px;
+    color: gray;
+    opacity: 0.5;
+    transition: color 0.2s, opacity 0.2s;
+  }
+  
+  /* Highlight active sort arrow */
+  .sort-arrow.active {
+    color: black;
+    opacity: 1;
+  }
+  
+  /* Ensure clickable headers look clean */
+  a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  
+  
+  
