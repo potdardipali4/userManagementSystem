@@ -2,7 +2,6 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as bootstrap from 'bootstrap';
-import { Modal } from 'bootstrap';
 import { UserService } from 'src/app/Services/user.service';
 
 @Component({
@@ -43,6 +42,16 @@ export class UserListComponent {
   ngOnInit() {
     this.userList = this.userService.getUsers();
   }
+
+  ngAfterViewInit() {
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+      new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  }
+
+
   get paginatedUserList() {
     let sortedList = [...this.userList];
     if (this.sortColumn) {

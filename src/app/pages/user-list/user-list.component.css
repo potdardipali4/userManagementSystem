@@ -45,7 +45,17 @@
   a:hover {
     text-decoration: underline;
   }
-  
+
+  td, table, th
+  {
+    border: 0.5px solid #eee6e6;
+  }
+  h3
+  {
+    font-family: serif;
+    font-weight: 600;
+    color: rgb(12 96 209) !important;
+  }
   
   
   

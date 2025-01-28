@@ -1,6 +1,6 @@
 <div class="container mt-5">
     <div class="row text-center">
-        <h3>User Management System</h3>
+        <h3 class="text-primary">User Management System</h3>
     </div>
     <div class="card mt-2">
         <div class="card-body">
@@ -10,23 +10,24 @@
                         <h5>User List</h5>
                     </div>
                     <div class="col text-end">
-                        <button class="btn btn-success btn-sm" (click)="addUser()">Add
+                        <button class="btn btn-primary btn-sm" title="Add User" (click)="addUser()">Add
                             User</button>
                     </div>
                 </div>
             </div>
 
             <div class=" row m-3">
-                <div class="col-2">
-                    <input type="text" class="form-control" placeholder="Filter by name" [(ngModel)]="filterName" (input)="filterData()">
+                <div class="col-12 col-md-4 col-lg-2">
+                    <input type="text" class="form-control" placeholder="Search By Name" [(ngModel)]="filterName"
+                        (input)="filterData()">
                 </div>
             </div>
 
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Sr. No</th>
-                        <th scope="col">
+                        <th scope="col" class="text-center" style="width: 5%;">Sr. No</th>
+                        <th scope="col" style="width: 50%;">
                             <a href="javascript:void(0)" (click)="sort('Name')">
                                 Name
                                 <span>
@@ -37,7 +38,7 @@
                                 </span>
                             </a>
                         </th>
-                        <th scope="col">
+                        <th scope="col" class="text-center" style="width: 10%;">
                             <a href="javascript:void(0)" (click)="sort('email')">
                                 Email
                                 <span>
@@ -48,23 +49,37 @@
                                 </span>
                             </a>
                         </th>
-                        <th scope="col">Role</th>
-                        <th scope="col">ACtion</th>
+                        <th scope="col" class="text-center" style="width: 10%;">Role</th>
+                        <th scope="col" class="text-center" style="width: 10%;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let user of paginatedUserList; let i=index">
-                        <th scope="row">{{i+1}}</th>
+                        <td class="text-center">{{i+1}}</td>
                         <td>{{user.name}}</td>
-                        <td>{{user.email}}</td>
-                        <td>{{user.role}}</td>
-                        <td><button class="btn btn-success btn-sm m-2" (click)="editUser(i, user)">Edit</button>
-                            <button class="btn btn-success btn-sm" (click)="deleteUser(i,user)">Delete</button>
+                        <td class="text-center">{{user.email}}</td>
+                        <td class="text-center">{{user.role}}</td>
+                        <td class="text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Edit" width="20" height="20" fill="#007bff" class="bi bi-pencil-square"
+                                viewBox="0 0 16 16" (click)="editUser(i, user)">
+                                <path
+                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                <path fill-rule="evenodd"
+                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                            </svg>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#D2122E"
+                                class="bi bi-trash-fill" viewBox="0 0 16 16" (click)="deleteUser(i,user)" title="Delete"
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                <path
+                                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                            </svg>
                         </td>
                     </tr>
-                    <tr colspan="12" class="text-center" *ngIf="paginatedUserList.length<= 0" > No Data Found </tr>
+                    <tr colspan="12" class="text-center" *ngIf="paginatedUserList.length<= 0"> No Data Found </tr>
                 </tbody>
-            </table>           
+            </table>
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end">
                     <li class="page-item" *ngIf="currentPage > 1">
@@ -79,7 +94,7 @@
                         <a class="page-link" (click)="changePage(currentPage + 1)" href="javascript:void(0)">Next</a>
                     </li>
                 </ul>
-            </nav>            
+            </nav>
         </div>
     </div>
 
@@ -101,33 +116,40 @@
             <div class="modal-body">
                 <form [formGroup]="userForm">
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input id="name" type="text" class="form-control" formControlName="name"
-                            [class.is-invalid]="name?.invalid && name?.touched" />
-                        <div *ngIf="name?.invalid && name?.touched" class="invalid-feedback">
-                            <small *ngIf="name?.errors?.['required']">Name is required.</small>
-                            <small *ngIf="name?.errors?.['minlength']">
-                                Name must be at least 3 characters long.
-                            </small>
+                        <div class="form-floating mb-3 mt-3">
+                            <input id="name" type="text" class="form-control" formControlName="name"
+                                [class.is-invalid]="name?.invalid && name?.touched" />
+                            <label for="email">Name</label>
+                            <div *ngIf="name?.invalid && name?.touched" class="invalid-feedback">
+                                <small *ngIf="name?.errors?.['required']">Name is required.</small>
+                                <small *ngIf="name?.errors?.['minlength']">
+                                    Name must be at least 3 characters long.
+                                </small>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="form-floating mb-3 mt-3">
+                            <input id="email" type="email" class="form-control" formControlName="email"
+                                [class.is-invalid]="email?.invalid && email?.touched" />
+                            <label for="email">Email</label>
+                            <div *ngIf="email?.invalid && email?.touched" class="invalid-feedback">
+                                <small *ngIf="email?.errors?.['required']">Email is required.</small>
+                                <small *ngIf="email?.errors?.['email']">Enter a valid email.</small>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input id="email" type="email" class="form-control" formControlName="email"
-                            [class.is-invalid]="email?.invalid && email?.touched" />
-                        <div *ngIf="email?.invalid && email?.touched" class="invalid-feedback">
-                            <small *ngIf="email?.errors?.['required']">Email is required.</small>
-                            <small *ngIf="email?.errors?.['email']">Enter a valid email.</small>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="role">Role</label>
+                        <div class="form-floating">
                         <select id="role" class="form-control" formControlName="role"
                             [class.is-invalid]="role?.invalid && role?.touched">
                             <option value="">Select Role</option>
                             <option value="Admin">Admin</option>
                             <option value="User">User</option>
                         </select>
+                        <label for="role">Role</label>
+                    </div>
                         <div *ngIf="role?.invalid && role?.touched" class="invalid-feedback">
                             <small *ngIf="role?.errors?.['required']">Role is required.</small>
                         </div>
