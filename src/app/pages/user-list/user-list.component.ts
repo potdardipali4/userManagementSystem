@@ -1,15 +1,16 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import * as bootstrap from 'bootstrap';
+// import * as bootstrap from 'bootstrap';
 import { UserService } from 'src/app/Services/user.service';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent {
+export class UserListComponent implements OnInit, AfterViewInit{
   userForm: FormGroup
   userList: any[] = [];
   showSubmit: boolean = true;
@@ -43,17 +44,28 @@ export class UserListComponent {
     this.userList = this.userService.getUsers();
   }
 
-  ngAfterViewInit() {
-    // Initialize tooltips
+  ngAfterViewInit(): void {
+    this.initializeTooltips(); // Initialize tooltips when the component loads
+  }
+
+  initializeTooltips(): void {
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.forEach(function (tooltipTriggerEl) {
       new bootstrap.Tooltip(tooltipTriggerEl);
     });
   }
 
+  performSomeAction(): void {
+    // Call this whenever DOM is updated
+    // For example, after adding new elements
+    this.initializeTooltips();
+  }
+
 
   get paginatedUserList() {
     let sortedList = [...this.userList];
+  
+    // Apply sorting
     if (this.sortColumn) {
       sortedList.sort((a: any, b: any) => {
         const valueA = a[this.sortColumn] ? (a[this.sortColumn] as string).toLowerCase() : '';
@@ -63,10 +75,21 @@ export class UserListComponent {
         return 0;
       });
     }
+  
+    // Filter data first
+    const filteredList = sortedList.filter(user =>
+      user.name.toLowerCase().includes(this.filterName?.toLowerCase() || '')
+    );
+  
+    // Apply pagination
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    return sortedList.slice(startIndex, endIndex);
+  
+    return filteredList.slice(startIndex, endIndex);
   }
+  
+  
+
 
   changePage(page: number) {
     this.currentPage = page;
@@ -93,6 +116,7 @@ export class UserListComponent {
         this.userService.addUser(this.userForm.value);
         this.userList = this.userService.getUsers();
         this.closeModal();
+        this.initializeTooltips()
       }
     } else {
       console.log('Form is invalid');
